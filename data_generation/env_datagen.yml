@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.9
+  - numpy
+  - scipy
+  - pymeep>=1.21.0=*mpich*
+  - mpi4py
+  - matplotlib

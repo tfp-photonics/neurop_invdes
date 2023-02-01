@@ -1,0 +1,15 @@
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - pytorch
+  - pytorch-lightning
+  - cudatoolkit=11.6
+  - fairscale
+  - einops
+  - h5py
+  - numpy
+  - scipy
+  - openmpi
+  - mpi4py
+  - tqdm
