@@ -27,7 +27,6 @@ python3 train_surrogates.py --data-dir /path/to/data
 ```
 Note that the dataloaders used here expect the following folder structure:
 ```
-
 data
 ├── train
 │   ├── train_data_0.h5
