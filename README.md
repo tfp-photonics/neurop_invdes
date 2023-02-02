@@ -12,6 +12,8 @@ conda activate your_env_prefix
 ```
 
 For data generation, use the environment file `env_datagen.yml` provided [here](./data_generation/).
+Note that the environment files specify strict version requirements - this is simply because everything has been tested using those versions.
+It is likely that everything works fine for different versions (of PyTorch, for instance), but we can make no guarantees.
 
 ## Usage
 
@@ -48,3 +50,8 @@ You can simply run the file without providing any arguments, which will train a 
 For inverse design, use the file `inverse_design_3d.py`.
 We do not currently provide an implementation for 2D inverse design, but it should be straightforward to adapt the current 3D implementation.
 Please note that this file needs pre-trained FNO and VAE models in [TorchScript](https://pytorch.org/docs/stable/jit.html) format.
+
+
+## Data availability
+
+Training data and pre-trained models are available from <https://doi.org/10.35097/911>.
