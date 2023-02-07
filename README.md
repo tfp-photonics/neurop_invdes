@@ -1,6 +1,6 @@
 # Surrogate solvers for electromagnetic field inference and inverse design
 
-This repository contains the code for the paper "A neural operator-based surrogate solver for free-form electromagnetic inverse design".
+This repository contains the code for the paper "A neural operator-based surrogate solver for free-form electromagnetic inverse design" ([arXiv](https://arxiv.org/abs/2302.01934)).
 
 ## Installation
 
@@ -55,3 +55,17 @@ Please note that this file needs pre-trained FNO and VAE models in [TorchScript]
 ## Data availability
 
 Training data and pre-trained models are available from <https://doi.org/10.35097/911>.
+
+## Citing
+
+If you use this code or associated data for your research, please cite:
+
+```
+@article{augenstein2023neural,
+  title={A neural operator-based surrogate solver for free-form electromagnetic inverse design
+},
+  author={Augenstein, Yannick and Rep{\"a}n, Taavi and Rockstuhl, Carsten},
+  journal={arXiv preprint arXiv:2302.01934},
+  year={2023}
+}
+```
