@@ -54,7 +54,9 @@ Please note that this file needs pre-trained FNO and VAE models in [TorchScript]
 
 ## Data availability
 
-Training data and pre-trained models are available from <https://doi.org/10.35097/911>.
+The official research data repository is provided by RADAR4KIT at <https://doi.org/10.35097/911>.
+
+If you have trouble obtaining the data from the official repository, we additionally provide it via OneDrive [here](https://1drv.ms/u/s!AqWGKelN_zKxwj3AEYxtGp3eLwry).
 
 ## Citing
 
