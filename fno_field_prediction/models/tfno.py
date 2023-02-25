@@ -1,4 +1,3 @@
-from fairscale.nn.checkpoint.checkpoint_activations import checkpoint_wrapper
 from neuralop.models.fno_block import FactorizedSpectralConv2d, FactorizedSpectralConv3d
 
 import torch.nn as nn
@@ -7,13 +6,16 @@ from ..loss_functions import HSLoss, LPLoss, MaxwellLoss
 from ._base import BaseModel
 
 
-class FNO(BaseModel):
+class TFNO(BaseModel):
     def __init__(
         self,
         modes,
         width,
         blocks,
         padding,
+        factorization,
+        joint_factorization,
+        rank,
         out_channels,
         lr,
         weight_decay,
@@ -35,39 +37,95 @@ class FNO(BaseModel):
             self.mloss_l2 = MaxwellLoss(lambda0, dl, loss_fn=self.l2_rel)
         if "3d" in self.name and with_maxwell_loss:
             raise RuntimeError("fno3d does not support maxwell loss!")
-        self.model = self.get_model(modes, width, blocks, padding, out_channels)
+        self.model = self.get_model(
+            modes,
+            width,
+            blocks,
+            padding,
+            factorization,
+            joint_factorization,
+            rank,
+            out_channels,
+        )
 
     @staticmethod
     def add_model_specific_args(parent_parser):
-        parser = parent_parser.add_argument_group("FNO")
-        parser.add_argument("--modes", type=int, default=12)
-        parser.add_argument("--width", type=int, default=32)
-        parser.add_argument("--blocks", type=int, default=10)
-        parser.add_argument("--padding", type=int, default=2)
+        parser = parent_parser.add_argument_group("TFNO")
+        parser.add_argument("--factorization", type=str, default="tucker")
+        parser.add_argument("--joint_factorization", action="store_true")
+        parser.add_argument("--rank", type=float, default=0.5)
         return parent_parser
 
 
-class TFNO2d(FNO):
+class TFNO2d(TFNO):
     name = "tfno2d"
 
     @staticmethod
-    def get_model(modes, width, blocks, padding, out_channels):
-        return TFNOModel2d(modes, width, blocks, padding, out_channels)
+    def get_model(
+        modes,
+        width,
+        blocks,
+        padding,
+        factorization,
+        joint_factorization,
+        rank,
+        out_channels,
+    ):
+        return TFNOModel2d(
+            modes,
+            width,
+            blocks,
+            padding,
+            factorization,
+            joint_factorization,
+            rank,
+            out_channels,
+        )
 
 
-class TFNO3d(FNO):
+class TFNO3d(TFNO):
     name = "tfno3d"
 
     @staticmethod
-    def get_model(modes, width, blocks, padding, out_channels):
-        return TFNOModel3d(modes, width, blocks, padding, out_channels)
+    def get_model(
+        modes,
+        width,
+        blocks,
+        padding,
+        factorization,
+        joint_factorization,
+        rank,
+        out_channels,
+    ):
+        return TFNOModel3d(
+            modes,
+            width,
+            blocks,
+            padding,
+            factorization,
+            joint_factorization,
+            rank,
+            out_channels,
+        )
 
 
 class TFNOModel2d(nn.Module):
-    def __init__(self, modes, width, blocks, padding, out_channels):
+    def __init__(
+        self,
+        modes,
+        width,
+        blocks,
+        padding,
+        factorization,
+        joint_factorization,
+        rank,
+        out_channels,
+    ):
         super().__init__()
         self.n_layers = blocks
-        self.fft_convs = self.get_fft_convs(modes, width)
+        self.fft_convs = self.get_fft_convs(
+            modes, width, factorization, joint_factorization, rank
+        )
         self.skips = self.get_skips(width)
         self.norms = self.get_norms(width)
         self.conv_in = self.get_conv(1, width)
@@ -76,7 +134,7 @@ class TFNOModel2d(nn.Module):
         self.pad_out = self.get_pad(-padding)
         self.act = nn.GELU()
 
-    def get_fft_convs(self, modes, width):
+    def get_fft_convs(self, modes, width, factorization, joint_factorization, rank):
         fno_convs = FactorizedSpectralConv2d(
             width,
             width,
@@ -85,10 +143,10 @@ class TFNOModel2d(nn.Module):
             n_layers=self.n_layers,
             implementation="factorized",
             fft_norm="forward",
-            factorization="cp",
-            joint_factorization=True,
+            factorization=factorization,
+            joint_factorization=joint_factorization,
             bias=False,
-            rank=0.5,
+            rank=rank,
         )
         return fno_convs
 
@@ -124,10 +182,22 @@ class TFNOModel2d(nn.Module):
 
 
 class TFNOModel3d(nn.Module):
-    def __init__(self, modes, width, blocks, padding, out_channels):
+    def __init__(
+        self,
+        modes,
+        width,
+        blocks,
+        padding,
+        factorization,
+        joint_factorization,
+        rank,
+        out_channels,
+    ):
         super().__init__()
         self.n_layers = blocks
-        self.fft_convs = self.get_fft_convs(modes, width)
+        self.fft_convs = self.get_fft_convs(
+            modes, width, factorization, joint_factorization, rank
+        )
         self.skips = self.get_skips(width)
         self.norms = self.get_norms(width)
         self.conv_in = self.get_conv(1, width)
@@ -136,7 +206,7 @@ class TFNOModel3d(nn.Module):
         self.pad_out = self.get_pad(-padding)
         self.act = nn.GELU()
 
-    def get_fft_convs(self, modes, width):
+    def get_fft_convs(self, modes, width, factorization, joint_factorization, rank):
         fno_convs = FactorizedSpectralConv3d(
             width,
             width,
@@ -146,12 +216,12 @@ class TFNOModel3d(nn.Module):
             n_layers=self.n_layers,
             implementation="factorized",
             fft_norm="forward",
-            factorization="cp",
-            joint_factorization=True,
+            factorization=factorization,
+            joint_factorization=joint_factorization,
             bias=False,
-            rank=0.5,
+            rank=rank,
         )
-        return checkpoint_wrapper(fno_convs)
+        return fno_convs
 
     def get_skips(self, width):
         return nn.ModuleList(
