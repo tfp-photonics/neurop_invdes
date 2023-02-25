@@ -7,6 +7,7 @@ from pathlib import Path
 import pytorch_lightning as pl
 from lightning_fabric.utilities.seed import seed_everything
 from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
+from pytorch_lightning.loggers import WandbLogger
 
 import torch
 from fno_field_prediction.data import FieldData
@@ -94,12 +95,20 @@ def main(args):
             )
         )
 
+    logger = WandbLogger(
+        project=args.project,
+        name=args.name,
+        group=args.group,
+        save_dir=str(args.log_dir),
+    )
+
     trainer = pl.Trainer(
         accelerator=args.accelerator,
         devices=args.devices,
         num_nodes=args.num_nodes,
         strategy=args.strategy,
         max_epochs=args.epochs,
+        logger=logger,
         callbacks=callbacks,
         fast_dev_run=args.dev,
         enable_progress_bar=False,
