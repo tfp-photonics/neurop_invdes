@@ -58,7 +58,7 @@ The official research data repository is provided by RADAR4KIT at <https://doi.o
 
 If you have trouble obtaining the data from the official repository, we additionally provide it via OneDrive [here](https://1drv.ms/u/s!AqWGKelN_zKxwj3AEYxtGp3eLwry).
 
-If you are downloading the dataset from China, you may download from this [link](https://pan.baidu.com/s/18KqzcxCRHItfJrPnDj8jtQ?pwd=rb94) as alternative option.
+If you are downloading the dataset from China, you may download from this [link](https://pan.baidu.com/s/18KqzcxCRHItfJrPnDj8jtQ?pwd=rb94) as an alternative option.
 
 ## Citing
 
