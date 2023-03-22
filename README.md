@@ -60,6 +60,10 @@ If you have trouble obtaining the data from the official repository, we addition
 
 If you are downloading the dataset from China, you may download from this [link](https://pan.baidu.com/s/18KqzcxCRHItfJrPnDj8jtQ?pwd=rb94) as an alternative option.
 
+## Reproducibility
+
+To reproduce results from the paper, please use the commit 73e7e197 (tagged `publication`).
+
 ## Citing
 
 If you use this code or associated data for your research, please cite:
