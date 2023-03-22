@@ -62,7 +62,7 @@ If you are downloading the dataset from China, you may download from this [link]
 
 ## Reproducibility
 
-To reproduce results from the paper, please use the commit 73e7e197 (tagged `publication`).
+To reproduce results from the paper, please use the commit 73e7e19 (tagged `publication`).
 
 ## Citing
 
