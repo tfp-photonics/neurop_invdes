@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-from fairscale.nn import checkpoint_wrapper
 
 from ..loss_functions import HSLoss, LPLoss, MaxwellLoss
 from ._base import BaseModel
@@ -103,7 +102,7 @@ class FNOModel2d(FNOModel):
 class FNOModel3d(FNOModel):
     @staticmethod
     def get_fno_block(modes, width):
-        return checkpoint_wrapper(FNOBlock3d(modes, width))
+        return FNOBlock3d(modes, width)
 
     @staticmethod
     def get_conv(in_channels, out_channels):
