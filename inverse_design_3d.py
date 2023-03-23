@@ -3,35 +3,21 @@
 import argparse
 import json
 import re
-import sys
 from pathlib import Path
 
 import h5py
 import numpy as np
-import torch
 from einops import rearrange
 from mpi4py import MPI
-from torch.optim import AdamW
 from tqdm import tqdm
+
+import torch
+from torch.optim import AdamW
 
 COMM = MPI.COMM_WORLD
 RANK = COMM.Get_rank()
 SIZE = COMM.Get_size()
 DEVICE = f"cuda:{RANK % torch.cuda.device_count()}"
-
-
-class onrank:
-    def __init__(self, rank):
-        self.noop = RANK != rank
-
-    def __enter__(self):
-        if self.noop:
-            sys.settrace(lambda _: None)
-            frame = sys._getframe(1)
-            frame.f_trace = lambda _: exec("raise")
-
-    def __exit__(self, *_):
-        return self.noop
 
 
 @torch.no_grad()
@@ -137,13 +123,14 @@ def main(args):
     x0_ = gather(asnumpy(x0))
     y0_ = gather(asnumpy(y0))
     z0_ = gather(asnumpy(z0))
-    with onrank(0), torch.no_grad(), h5py.File(args.output_file, "w") as f:
-        for k, v in json.loads(json.dumps(vars(args), default=str)).items():
-            f.attrs[k] = v
-        f.create_dataset("mask", data=mask, dtype="?", compression="gzip")
-        f.create_dataset("x0", data=x0_, dtype="f4", compression="gzip")
-        f.create_dataset("y0", data=y0_, dtype="f4", compression="gzip")
-        f.create_dataset("z0", data=z0_, dtype="c8", compression="gzip")
+    if RANK == 0:
+        with torch.no_grad(), h5py.File(args.output_file, "w") as f:
+            for k, v in json.loads(json.dumps(vars(args), default=str)).items():
+                f.attrs[k] = v
+            f.create_dataset("mask", data=mask, dtype="?", compression="gzip")
+            f.create_dataset("x0", data=x0_, dtype="f4", compression="gzip")
+            f.create_dataset("y0", data=y0_, dtype="f4", compression="gzip")
+            f.create_dataset("z0", data=z0_, dtype="c8", compression="gzip")
 
     del x0_, y0_, z0_
     del y0, z0
@@ -157,11 +144,12 @@ def main(args):
     yopt_ = gather(asnumpy(yopt))
     zopt_ = gather(asnumpy(zopt))
     hist_ = gather(hist)
-    with onrank(0), torch.no_grad(), h5py.File(args.output_file, "a") as f:
-        f.create_dataset("xopt", data=xopt_, dtype="f4", compression="gzip")
-        f.create_dataset("yopt", data=yopt_, dtype="f4", compression="gzip")
-        f.create_dataset("zopt", data=zopt_, dtype="c8", compression="gzip")
-        f.create_dataset("hist", data=hist_, compression="gzip")
+    if RANK == 0:
+        with torch.no_grad(), h5py.File(args.output_file, "a") as f:
+            f.create_dataset("xopt", data=xopt_, dtype="f4", compression="gzip")
+            f.create_dataset("yopt", data=yopt_, dtype="f4", compression="gzip")
+            f.create_dataset("zopt", data=zopt_, dtype="c8", compression="gzip")
+            f.create_dataset("hist", data=hist_, compression="gzip")
 
 
 if __name__ == "__main__":
