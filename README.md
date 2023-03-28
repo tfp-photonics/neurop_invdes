@@ -1,6 +1,6 @@
 # Surrogate solvers for electromagnetic field inference and inverse design
 
-This repository contains the code for the paper "A neural operator-based surrogate solver for free-form electromagnetic inverse design" ([arXiv](https://arxiv.org/abs/2302.01934)).
+This repository contains code for the paper "Neural Operator-Based Surrogate Solver for Free-Form Electromagnetic Inverse Design" ([ACS Photonics](https://pubs.acs.org/doi/10.1021/acsphotonics.3c00156), [arXiv](https://arxiv.org/abs/2302.01934)).
 
 ## Installation
 
@@ -68,11 +68,13 @@ To reproduce results from the paper, please use the commit 73e7e19 (tagged `publ
 
 If you use this code or associated data for your research, please cite:
 
-```
+```bibtex
 @article{augenstein2023neural,
-  title={A neural operator-based surrogate solver for free-form electromagnetic inverse design},
-  author={Augenstein, Yannick and Rep{\"a}n, Taavi and Rockstuhl, Carsten},
-  journal={arXiv preprint arXiv:2302.01934},
-  year={2023}
+  title = {Neural Operator-Based Surrogate Solver for Free-Form Electromagnetic Inverse Design},
+  author = {Augenstein, Yannick and Rep\"{a}n, Taavi and Rockstuhl, Carsten},
+  journal = {ACS Photonics},
+  year = {2023},
+  doi = {10.1021/acsphotonics.3c00156},
+  url = {https://doi.org/10.1021/acsphotonics.3c00156}
 }
 ```
