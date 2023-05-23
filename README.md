@@ -72,9 +72,11 @@ If you use this code or associated data for your research, please cite:
 @article{augenstein2023neural,
   title = {Neural Operator-Based Surrogate Solver for Free-Form Electromagnetic Inverse Design},
   author = {Augenstein, Yannick and Rep\"{a}n, Taavi and Rockstuhl, Carsten},
+  year = 2023,
   journal = {ACS Photonics},
-  year = {2023},
-  doi = {10.1021/acsphotonics.3c00156},
-  url = {https://doi.org/10.1021/acsphotonics.3c00156}
+  volume = 10,
+  number = 5,
+  pages = {1547--1557},
+  doi = {10.1021/acsphotonics.3c00156}
 }
 ```
