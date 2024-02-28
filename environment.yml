@@ -19,4 +19,4 @@ dependencies:
   - zarr
   - pip:
       - tensorly-torch
-      - git+https://github.com/NeuralOperator/neuraloperator
+      - git+https://github.com/NeuralOperator/neuraloperator@3edd7e8
