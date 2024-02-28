@@ -144,7 +144,7 @@ if __name__ == "__main__":
     grp_train.add_argument("--weight-decay", type=float, default=1e-6)
     grp_train.add_argument("--with-maxwell-loss", action="store_true")
     grp_train.add_argument("--data-dir", type=Path, required=True)
-    grp_train.add_argument("--data-key", type=str, default="design")
+    grp_train.add_argument("--data-key", type=str, default="permittivity")
     grp_train.add_argument("--label-key", type=str, default="fields")
     grp_train.add_argument("--batch-size", type=int, default=32)
     grp_train.add_argument("--split", type=int, nargs=2, default=[2048, 256])
